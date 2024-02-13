@@ -77,5 +77,61 @@ app.get("/dynamic", (req, res) => {
   }
 });
 
+app.get("/getAllItems", (req, res) => {
+  
+  const sql = "SELECT * FROM items";
+  update_sql(res, sql);
+});
+
+app.post("/addItem", (req, res) => {
+
+  const {name, desc} = req.body;
+  if (!isNaN(name) || !isNaN(desc)) {
+    console.log(null);
+    res.send("null");
+    return;
+  }
+
+  const sql = "INSERT INTO items (`name`, `desc`) VALUES (?, ?)";
+  update_sql(res, sql, [name, desc]);
+});
+
+app.post("/deleteItem", async (req, res) => {
+
+  const id = req.body.id;
+  if (!isNumberNotEmpty(id)) {
+    console.log(null);
+    res.send("null");
+    return;
+
+  } else if (!await check_existence(id)) {
+    console.log({});
+    res.send({});
+    return;
+  }
+
+  const sql = "DELETE FROM items WHERE `id` = ?";
+  update_sql(res, sql, [id]);
+});
+
+app.post("/updateItem", async function(req, res){
+
+  const {id, name, desc} = req.body;
+  
+  if (!isNumberNotEmpty(id) || !isNaN(name) || !isNaN(desc)) {
+    console.log(null);
+    res.send("null");
+    return;
+
+  } else if (!await check_existence(id)) {
+    console.log({});
+    res.send({});
+    return;
+  }
+
+  const sql = "UPDATE items SET `name` = ?, `desc` = ? WHERE `id` = ?";
+  update_sql(res, sql, [id, name, desc]);
+});
+
 
 app.listen(3000);
