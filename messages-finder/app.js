@@ -99,12 +99,13 @@ app.post("/addItem", (req, res) => {
 app.post("/deleteItem", async (req, res) => {
 
   const id = req.body.id;
+
   if (!isNumberNotEmpty(id)) {
     console.log(null);
     res.send("null");
     return;
-
-  } else if (!await check_existence(id)) {
+  }
+  if (!await check_existence(id)) {
     console.log({});
     res.send({});
     return;
@@ -117,13 +118,14 @@ app.post("/deleteItem", async (req, res) => {
 app.post("/updateItem", async function(req, res){
 
   const {id, name, desc} = req.body;
-  
+
   if (!isNumberNotEmpty(id) || !isNaN(name) || !isNaN(desc)) {
     console.log(null);
     res.send("null");
     return;
 
-  } else if (!await check_existence(id)) {
+  } 
+  if (!await check_existence(id)) {
     console.log({});
     res.send({});
     return;
