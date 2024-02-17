@@ -34,6 +34,53 @@ function isNumberNotEmpty(str) {
 }
 
 
+
+const token = "6637576016:AAFXvWBO9hQ9CxtjMpGEzMD7twgimGgPAOQ";
+const bot = new TelegramBot(token, {polling: true});
+
+bot.onText(/\/help/, (msg, match) => {
+  const chatId = msg.chat.id;
+  const helpMessage = 
+  "Это тестовый бот, пока что с примитивными командами :)\n\n" +
+  "Ниже список команд, которые могут тебе помочь:\n\n" +
+  "/help - вернуть список команд\n" +
+  "/start - получить приветственное сообщение\n" +
+  "/site - получить ссылку на сайт октагона\n" +
+  "/creator - получить ФИО создателя"
+
+  bot.sendMessage(chatId, helpMessage);
+})
+
+bot.onText(/\/start/, (msg, match) => {
+  const chatId = msg.chat.id;
+  const helloMessage = 
+  "Привет, октагон!\n\n" +
+  "Воспользуйся командой /help чтобы получить список команд";
+
+  bot.sendMessage(chatId, helloMessage);
+});
+
+bot.onText(/\/site/, (msg, match) => {
+  const chatId = msg.chat.id;
+  const octagonLink = "Ссылка на сайт октагона: https://students.forus.ru/";
+
+  bot.sendMessage(chatId, octagonLink);
+})
+
+bot.onText(/\/creator/, (msg, match) => {
+  const chatId = msg.chat.id;
+  const creatorFullName = "Инициалы создателя: Исполатов Вадим Петрович";
+
+  bot.sendMessage(chatId, creatorFullName);
+})
+
+// bot.on("message", (msg) => {
+//   const chatId = msg.chat.id;
+
+//   bot.sendMessage(chatId, "Received your message");
+// });
+
+
 const app = express();
 
 app.use(express.json());
@@ -52,22 +99,6 @@ const pool = mysql.createPool({
   user: "root",
   database: "chatbottests"
 }).promise();
-
-const token = "6637576016:AAFXvWBO9hQ9CxtjMpGEzMD7twgimGgPAOQ";
-const bot = new TelegramBot(token, {polling: true});
-
-bot.onText(/\/start/, (msg, match) => {
-  const chatId = msg.chat.id;
-  const resp = match[1];
-
-  bot.sendMessage(chatId, "Привет, октагон!");
-});
-
-// bot.on("message", (msg) => {
-//   const chatId = msg.chat.id;
-
-//   bot.sendMessage(chatId, "Received your message");
-// });
 
 
 // paths
