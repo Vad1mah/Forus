@@ -1,4 +1,6 @@
-const { doQueryRandomItem } = require('../sql/utils');
+const { doQueryRandomItem, generateQr,
+        generateWebshot,
+} = require('../sql/utils');
 
 async function handleStart(ctx) {
   await ctx.reply(
@@ -14,11 +16,13 @@ async function handleHelp(ctx) {
     '/help - вернуть список команд\n' +
     '/start - получить приветственное сообщение\n' +
     '/site - получить ссылку на сайт октагона\n' +
-    '/creator - получить ФИО создателя\n\n' +
+    '/creator - получить ФИО создателя\n' +
+    '!qr <текст/ссылка> - получить qr по указанному значению\n' +
+    '!webscr <веб-адрес> - получить изображение страницы\n\n' +
     'Sql запросы:\n\n' +
     '/randomItem - вернуть случайную запись из таблицы бд\n' +
     '/deleteItem - удалить запись из таблицы бд\n' +
-    '/getItemByID - вернуть запись из таблицы бд по ID'
+    '/getItemByID - вернуть запись из таблицы бд по ID\n'
   );
 }
 
@@ -40,12 +44,26 @@ async function handleDeleteItem(ctx) {
 }
 
 async function handleGetItemByID(ctx) {
-    await ctx.conversation.enter('searchById');
+  await ctx.conversation.enter('searchById');
+}
+
+// async function handleQr(ctx) {
+//   await ctx.conversation.enter('generateQr');
+// }
+
+async function handleQr(ctx) {
+  const answ = await generateQr(ctx);
+  await ctx.reply(answ, {parse_mode : 'Markdown'});
+}
+
+async function handleWebshot(ctx) {
+  const answ = await generateWebshot(ctx);
+  await ctx.reply(answ, {parse_mode : 'Markdown'});
 }
 
 
 module.exports = { handleStart, handleHelp,
                   handleGetOctLink, handleGetCreator,
                   handleRandomItem, handleDeleteItem,
-                  handleGetItemByID
+                  handleGetItemByID, handleQr, handleWebshot
                 }

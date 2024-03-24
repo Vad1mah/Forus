@@ -20,15 +20,12 @@ const { reqHandleErrors } = require('./utils/helpers.js');
 const { сancelMenu } = require('./middleware/menus.js');
 
 // Диалоги
-const { searchById, deleteById } = require('./middleware/conversations.js');
+const { searchById, deleteById,
+        generateQr, 
+} = require('./middleware/conversations.js');
 
-// Обработчики команд
-const { handleStart, handleHelp,
-  handleGetOctLink, handleGetCreator,
-  handleRandomItem, handleDeleteItem,
-  handleGetItemByID
-} = require('./middleware/handlers.js');
-
+// Обработчик команд
+const { checkCommands } = require('./middleware/commandsHandler.js');
 
 
 const bot = new Bot(process.env.BOT_API_KEY);
@@ -54,17 +51,14 @@ bot.use(conversations());
 bot.use(сancelMenu);
 
 bot.use(createConversation(deleteById),
-        createConversation(searchById)
-      );
+        createConversation(searchById),
+        createConversation(generateQr),
+);
 
-
-bot.command('start', handleStart);
-bot.command('help', handleHelp);
-bot.command('site', handleGetOctLink);
-bot.command('creator', handleGetCreator);
-bot.command('randomItem', handleRandomItem);
-bot.command('deleteItem', handleDeleteItem);
-bot.command('getItemByID', handleGetItemByID);
+checkCommands(bot);
 
 
 bot.start();
+
+
+module.exports = { bot }

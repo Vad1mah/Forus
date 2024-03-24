@@ -83,8 +83,23 @@ async function doQueryDeleteById(ctx) {
 
 }
 
+async function generateQr(ctx) {
+  const { message: { text } } = ctx;
+  const url = text.substring(3).trim();
+  const qrImage = `https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=${encodeURIComponent(url)}`;
+  return `[✏️](${qrImage}) Qr-код на: ${url}`;
+}
+
+async function generateWebshot(ctx) {
+  const { message: { text } } = ctx;
+  const url = text.substring(8).trim();
+  const image = 'https://api.letsvalidate.com/v1/thumbs/?url=' + url + '&width=1280&height=720';
+  return `[📷](${image}) Изображение на: ${url}`;
+}
+
 
 module.exports = { updateSql, checkExistence,
                   doQuerySearchByiD, doQueryDeleteById,
-                  doQueryRandomItem,
+                  doQueryRandomItem, generateQr,
+                  generateWebshot
                 }
